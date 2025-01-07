@@ -227,6 +227,7 @@ namespace FontStashSharp.RichText
 		}
 
 		public bool IgnoreColorCommand { get; set; } = false;
+		public bool ApplyAlphaOnColors { get; set; } = true;
 
 		public char CommandPrefix
 		{
@@ -389,7 +390,11 @@ namespace FontStashSharp.RichText
 					var chunkColor = color;
 					if (!IgnoreColorCommand && chunk.Color != null)
 					{
-						chunkColor = chunk.Color.Value * (color.A / 255f);
+						chunkColor = chunk.Color.Value;
+						if (ApplyAlphaOnColors)
+						{
+							chunkColor *= color.A / 255f;
+						}
 					}
 
 					chunk.Draw(_renderContext, pos + new Vector2(0, chunk.VerticalOffset), chunkColor);
